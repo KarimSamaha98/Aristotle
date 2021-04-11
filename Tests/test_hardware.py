@@ -1,22 +1,18 @@
-import RPi.GPIO as GPIO
+
+
 import time
-from mpu6050 import mpu6050
-import math
-sensor=mpu6050(0x68)
+import sys
+import os
+sys.path.append(os.getcwd())
+import math 
+from config.config import *
+    
+try:
+    import RPi.GPIO as GPIO
+    from mpu6050 import mpu6050
+except:
+    print('[INFO] Could not import pi based packages')
 
-##Enter set up parameters
-CLK_M1 = 15
-CW_M1 = 18
-CLK_M2 = 17
-CW_M2 = 27
-degperstep=1.8
-
-##Setup Pin Modes
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(CLK_M1, GPIO.OUT) #CLK
-GPIO.setup(CW_M1, GPIO.OUT) #CW
-GPIO.setup(CLK_M2, GPIO.OUT) #CLK
-GPIO.setup(CW_M2, GPIO.OUT) #CW
 
 def rotateMotorR():
     #Set direction
