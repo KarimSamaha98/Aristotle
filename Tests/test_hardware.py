@@ -59,7 +59,6 @@ def move_backward(speed):
     #Find the residual delay
     T = (degperstep*60)/(360*speed)
     T = T - 0.0004
-    print(T)
     if T<0: #Faster than maximum
         T = 0
 
@@ -105,5 +104,5 @@ def TestGyro():
         time.sleep(0.3)
 
 while True:
-    move_backward(200) #1 per second
+    move_backward(60) #1 per second
 
