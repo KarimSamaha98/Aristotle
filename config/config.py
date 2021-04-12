@@ -1,6 +1,9 @@
 #Configuration
-import RPi.GPIO as GPIO
-from mpu6050 import mpu6050
+try:
+    import RPi.GPIO as GPIO
+    from mpu6050 import mpu6050
+except:
+    print('[INFO] Could not import pi based packages')
 ##Enter set up parameters for stepper motors
 CLK_M1 = 15 #CLK pin connected to pi for motor R
 CW_M1 = 18 #CW pin connected to pi for motor R
