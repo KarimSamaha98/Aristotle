@@ -2,7 +2,7 @@ import time
 import random
 import matplotlib.pyplot as plt
 
-def livePlot(variable, Variable, Time):
+def livePlot(variable, Variable, Time, figure, axis, number, Color):
     #Get intial time 
     if len(Variable) == 0:
         Time = []
@@ -20,22 +20,21 @@ def livePlot(variable, Variable, Time):
     plt.gca().cla()
 
     #Plot
-    plt.plot(Time, Variable)
-    plt.scatter(Time,Variable)
+    axis[number].plot(Time, Variable,color=Color)
+    axis[number].scatter(Time,Variable,color=Color)
 
     #Func
     def namestr(obj, namespace):
         return [name for name in namespace if namespace[name] is obj]
 
     #Label
-    plt.title("Plot of %s readings" % namestr(Variable, globals()))
-    plt.xlabel('Time in s')
-    plt.ylabel(namestr(Variable, globals()))
+    axis[number].set_title("Plot of %s readings" % namestr(Variable, globals()))
+    axis[number].set_xlabel('Time in s')
+    axis[number].set_ylabel(namestr(Variable, globals()))
 
-    #Draw
+    #Plot
     plt.draw()
-    plt.pause(0.05)
-
+    plt.pause(0.001)
     #Return
     return Variable, Time
 

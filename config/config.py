@@ -13,6 +13,7 @@ degperstep=1.8 #Degrees per step of the stepper motor
 
 ##Setup Pin Modes
 try:
+    GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(CLK_M1, GPIO.OUT) #CLK
     GPIO.setup(CW_M1, GPIO.OUT) #CW
