@@ -17,9 +17,9 @@ except:
 Gyroscope = Gyro(gyro_addr)
 
 #Instantiate a controller object
-Kp = 0.6
-Kd = 2
-Ki = 0.5
+Kp = 1.2
+Kd = 0
+Ki = 0
 Controller = Controller(Kp, Ki, Kd, 0, 200)
 
 
@@ -41,12 +41,17 @@ while True:
         break
     
     #Plot it in a loop
-    Tilt, Time_t = livePlot(angle, Tilt, Time_t, figure,axis,0,'green')
+    #Tilt, Time_t = livePlot(angle, Tilt, Time_t, figure,axis,0,'green')
     #Get the actuation signal
     final_time = time.time()
     delta = final_time-init_time
     #print(delta)
+    stamp1 = time.time()
     speed, previous_error, error_integral = Controller.get_Actuation(angle, previous_error, error_integral, delta)
+    stamp2 = time.time()
+    print('time to get the actuation is ', stamp2-stamp1, ' seconds')
     init_time = time.time()
     print('the speed in rpm is ', speed)
-    Speed, Time_s = livePlot(speed, Speed, Time_s, figure,axis,1,'blue')
+    #Speed, Time_s = livePlot(speed, Speed, Time_s, figure,axis,1,'blue')
+    #Take action
+    Controller.Balance(speed, 0.2)

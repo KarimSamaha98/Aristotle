@@ -1,3 +1,4 @@
+from Motors.Motors import *
 class Controller:
     def __init__(self, Kp, Ki, Kd, reference, treshhold):
         self.Kp = Kp
@@ -25,3 +26,16 @@ class Controller:
                 actuation = -self.treshhold
         #return the actuation signal
         return actuation,error,error_integral
+
+    def Balance(self, actuation, delta):
+        init = time.time()
+        if actuation > 0:
+            print('[INFO] Moving Backwards')
+            while(time.time()-init>delta):
+                move_backward(abs(actuation))
+                
+        else:
+            move_forward(abs(actuation))
+            print('[INFO] Moving Forward')
+            while(time.time()-init<delta):
+                move_forward(abs(actuation))

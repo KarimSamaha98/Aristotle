@@ -1,5 +1,4 @@
 
-
 import time
 import sys
 import os
@@ -80,24 +79,9 @@ def TestMotors():
 
     print('Moving Forward ...')
     for i in range(1000):
-        move_forward(200)
+        move_forward(0.0004)
 
     print('Moving Backward ...')
     for i in range(1000):
-        move_backward(200)
-
-def get_Tilt():
-    data = sensor.get_accel_data()
-    tilt = math.atan(data["x"]/(math.sqrt(data["y"]**2+data["z"]**2)))
-    tilt=tilt*180/math.pi
-    return tilt #Value between -90 and 90degrees
-
-def TestGyro():
-    print('Fetching data from gyro')
-    for i in range(200):
-        print(get_Tilt())
-        time.sleep(0.3)
-
-while True:
-    TestMotors()
+        move_backward(0.0004)
 
