@@ -11,6 +11,7 @@ class Controller:
         #params are the Kp, Ki, Kd parameters
         #output: actuation signals
         error = self.reference - reading
+        print(error)
         #calculate the derivative
         error_derivative = (error - previous_error)/delta
         #calculate the integral
@@ -19,6 +20,7 @@ class Controller:
         #compute actuation signal
         actuation = self.Kp*error + self.Kd*error_derivative + self.Ki*error_integral
         #need to saturate the input
+        print(actuation)
         if abs(actuation)>self.treshhold:
             if actuation>0:
                 actuation = self.treshhold
@@ -31,7 +33,7 @@ class Controller:
         init = time.time()
         if actuation > 0:
             print('[INFO] Moving Backwards')
-            while(time.time()-init>delta):
+            while(time.time()-init<delta):
                 move_backward(abs(actuation))
                 
         else:
