@@ -99,5 +99,5 @@ def TestGyro():
         time.sleep(0.3)
 
 while True:
-    move_backward(600)
+    TestMotors()
 

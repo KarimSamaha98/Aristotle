@@ -7,6 +7,7 @@ from config.config import *
 from Gyro.Gyro import Gyro
 from Utils.Visualisation.Visual import *
 from Control.PID import *
+import csv
 try:
     import RPi.GPIO as GPIO
     from mpu6050 import mpu6050
@@ -17,10 +18,10 @@ except:
 Gyroscope = Gyro(gyro_addr)
 
 #Instantiate a controller object
-Kp = 7
+Kp = 1
 Kd = 0
 Ki = 0
-Controller = Controller(Kp, Ki, Kd, 0, 600)
+Controller = Controller(Kp, Ki, Kd, -5, 600)
 
 
 Tilt = []
@@ -31,6 +32,10 @@ figure, axis = plt.subplots(1, 2)
 previous_error = 0
 error_integral = 0
 init_time = time.time()
+##Write csv
+with open('logs.csv','w', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerow(['angle','speed'])
 while True:
 
     #Extract the value continuously
@@ -45,13 +50,18 @@ while True:
     #Get the actuation signal
     final_time = time.time()
     delta = final_time-init_time
-    print(angle)
+    #print(angle)
     stamp1 = time.time()
     speed, previous_error, error_integral = Controller.get_Actuation(angle, previous_error, error_integral, delta)
     stamp2 = time.time()
     #print('time to get the actuation is ', stamp2-stamp1, ' seconds')
     init_time = time.time()
-    print('the speed in rpm is ', speed)
+    #print('the speed in rpm is ', speed)
     #Speed, Time_s = livePlot(speed, Speed, Time_s, figure,axis,1,'blue')
+    
     #Take action
-    Controller.Balance(speed, 0.01)
+    Controller.Balance(speed, 0.05)
+    #time.sleep(0.1)
+    with open('logs.csv','a', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow([angle-5, speed])
