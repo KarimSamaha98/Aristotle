@@ -11,6 +11,8 @@ class Controller:
         #params are the Kp, Ki, Kd parameters
         #output: actuation signals
         error = self.reference - reading
+        if abs(error) < 1:
+            error = 0
         print(error)
         print('e ,', error)
         #calculate the derivative
