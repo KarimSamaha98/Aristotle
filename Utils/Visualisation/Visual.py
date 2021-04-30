@@ -1,6 +1,10 @@
-import time
+import csv
 import random
+import time
+
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+
 
 def livePlot(variable, Variable, Time, figure, axis, number, Color):
     #Get intial time 
@@ -37,13 +41,25 @@ def livePlot(variable, Variable, Time, figure, axis, number, Color):
     plt.pause(0.001)
     #Return
     return Variable, Time
+def GetData(filename):
+    with open(filename, mode='r') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter = ',')
+        for row in csv_reader:
+            print(row)
+
+def Plot(X,Y, color = 'blue'):
+    #Plots the arrays X and Y
+    plt.cla()
+    plt.plot(X,Y,color)
+   
+def LiveStream():
+    #Plots live data
+    ani = FuncAnimation(plt.gcf(), Plot, interval=1000)
 
 
 #Test it out 
 if __name__ == "__main__":
-    fig = plt.figure(figsize=(12,6))
-    Tilt = []
-    Time = []
-    for i in range(150):
-        Tilt, Time = livePlot(random.randint(-5,5), Tilt, Time)
-        time.sleep(1)
+    GetData(filename = 'Data/gyro.csv')
+
+
+    
