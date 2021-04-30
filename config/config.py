@@ -9,8 +9,7 @@ CLK_M1 = 15 #CLK pin connected to pi for motor R
 CW_M1 = 18 #CW pin connected to pi for motor R
 CLK_M2 = 17 #CLK pin connected to pi for motor L
 CW_M2 = 27 #CW pin connected to pi for motor R
-degperstep=1.8 #Degrees per step of the stepper motor
-
+degperstep=0.225 #Degrees per step of the stepper motor
 ##Setup Pin Modes
 try:
     GPIO.setwarnings(False)

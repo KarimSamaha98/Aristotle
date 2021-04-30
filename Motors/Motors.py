@@ -33,55 +33,42 @@ def rotateMotorL():
 
 def move_forward(speed):
     #Find the residual delay
-    T = (degperstep*60)/(360*speed)
-    T = T - 0.0004
-    if T<0: #Faster than maximum
-        T = 0
+    if speed == 0:
+        print('Stable')
+    else:
+        T = (degperstep*60)/(360*speed)
+        T = T - (6.25*10**-5)
+        if T<0: #Faster than maximum
+            T = 0
 
-    #Set direction
-    GPIO.output(CW_M2,GPIO.HIGH)
-    GPIO.output(CW_M1,GPIO.LOW)
-    time.sleep(0.0004)
-    GPIO.output(CLK_M1,GPIO.HIGH)
-    GPIO.output(CLK_M2,GPIO.HIGH)
-    time.sleep(0.0004)
-    GPIO.output(CLK_M1,GPIO.LOW)
-    GPIO.output(CLK_M2,GPIO.LOW)
-    time.sleep(T)
+        #Set direction
+        GPIO.output(CW_M2,GPIO.HIGH)
+        GPIO.output(CW_M1,GPIO.LOW)
+        time.sleep((6.25*10**-5))
+        GPIO.output(CLK_M1,GPIO.HIGH)
+        GPIO.output(CLK_M2,GPIO.HIGH)
+        time.sleep((6.25*10**-5))
+        GPIO.output(CLK_M1,GPIO.LOW)
+        GPIO.output(CLK_M2,GPIO.LOW)
+        time.sleep(T)
 
 def move_backward(speed):
     #Find the residual delay
-    T = (degperstep*60)/(360*speed)
-    T = T - 0.0004
-    if T<0: #Faster than maximum
-        T = 0
+    if speed == 0:
+        print('Stable')
+    else:
+        T = (degperstep*60)/(360*speed)
+        T = T - (6.25*10**-5)
+        if T<0: #Faster than maximum
+            T = 0
 
-    #Set direction
-    GPIO.output(CW_M1,GPIO.HIGH)
-    GPIO.output(CW_M2,GPIO.LOW)
-    time.sleep(0.0004)
-    GPIO.output(CLK_M1,GPIO.HIGH)
-    GPIO.output(CLK_M2,GPIO.HIGH)
-    time.sleep(0.0004)
-    GPIO.output(CLK_M1,GPIO.LOW)
-    GPIO.output(CLK_M2,GPIO.LOW)
-    time.sleep(T)
-
-
-def TestMotors():
-    print('Testing Right Motor ...')
-    for i in range(1000):
-        rotateMotorR()
-
-    print('Testing Left Motor ...')
-    for i in range(1000):
-        rotateMotorL()
-
-    print('Moving Forward ...')
-    for i in range(1000):
-        move_forward(0.0004)
-
-    print('Moving Backward ...')
-    for i in range(1000):
-        move_backward(0.0004)
-
+        #Set direction
+        GPIO.output(CW_M1,GPIO.HIGH)
+        GPIO.output(CW_M2,GPIO.LOW)
+        time.sleep(6.25*10**-5)
+        GPIO.output(CLK_M1,GPIO.HIGH)
+        GPIO.output(CLK_M2,GPIO.HIGH)
+        time.sleep(6.25*10**-5)
+        GPIO.output(CLK_M1,GPIO.LOW)
+        GPIO.output(CLK_M2,GPIO.LOW)
+        time.sleep(T)
