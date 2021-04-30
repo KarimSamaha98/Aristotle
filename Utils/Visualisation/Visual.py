@@ -43,7 +43,7 @@ def livePlot(variable, Variable, Time, figure, axis, number, Color):
     return Variable, Time
 def GetData(filename):
     with open(filename, mode='r') as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter = ',')
+        csv_reader = csv.reader(csv_file, delimiter = )
         for row in csv_reader:
             print(row)
 
