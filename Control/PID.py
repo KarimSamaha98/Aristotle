@@ -7,7 +7,7 @@ class Controller:
         self.reference = reference
         self.treshhold = treshhold
 
-    def get_Actuation(self, reading, previous_error, error_integral, delta):
+    def get_Actuation(self, reading, previous_error, error_integral, delta, logging=False):
         #params are the Kp, Ki, Kd parameters
         #output: actuation signals
         error = self.reference - reading
@@ -30,6 +30,12 @@ class Controller:
                 actuation = self.treshhold
             else:
                 actuation = -self.treshhold
+        timestamp = time.time() - reference_time
+
+        #Logging
+        if logging:
+            WriteData('Data/Controller.csv', [timestamp, error, actuation], ['Time', 'Error', 'Speed'])
+
         #return the actuation signal
         return actuation,error,error_integral
 

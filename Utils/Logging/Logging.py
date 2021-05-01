@@ -11,7 +11,7 @@ from matplotlib.animation import FuncAnimation
 def WriteData(filename, data, labels):
     #filename = Name of the file to be written in string format
     #Data = Data stream including the 'Time' and 'Signal' in a numpy array
-    tresh = 100000 #maximum number of instances in the csv file
+    tresh = 500 #maximum number of instances in the csv file
     try:
         df = pd.read_csv(filename, header=None)
         Labels = np.array(df.iloc[0])
