@@ -1,65 +1,63 @@
 import csv
 import random
 import time
-
+import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import pandas as pd
+import sys
+import os
+sys.path.append(os.getcwd())
+from Utils.Logging.Logging import *
 
 
-def livePlot(variable, Variable, Time, figure, axis, number, Color):
-    #Get intial time 
-    if len(Variable) == 0:
-        Time = []
-        global reference_time
-        reference_time = time.time()
-    #Update data
-    if len(Variable) > 100:
-        Variable.pop(0)
-        Time.pop(0)
-
-    Variable.append(variable)
-    Time.append(time.time() - reference_time)
-
-    #Clear axis
-    plt.gca().cla()
-
-    #Plot
-    axis[number].plot(Time, Variable,color=Color)
-    axis[number].scatter(Time,Variable,color=Color)
-
-    #Func
-    def namestr(obj, namespace):
-        return [name for name in namespace if namespace[name] is obj]
-
-    #Label
-    axis[number].set_title("Plot of %s readings" % namestr(Variable, globals()))
-    axis[number].set_xlabel('Time in s')
-    axis[number].set_ylabel(namestr(Variable, globals()))
-
-    #Plot
-    plt.draw()
-    plt.pause(0.001)
-    #Return
-    return Variable, Time
 def GetData(filename):
     with open(filename, mode='r') as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter = )
+        csv_reader = csv.reader(csv_file, delimiter =',')
+        counter = 0
+        Data = []
+        #Read Data into python lists
         for row in csv_reader:
-            print(row)
+            if counter == 0:
+                #Extract the labels
+                Labels = row
+            else:
+                Data.append(row)
+            counter = counter + 1
+        #Delete old content
+        if counter > 1000:
+            csv
+        #Convert to numpy
+        Data = np.array(Data, dtype=float)
+        Label = np.array(Labels, dtype=str)
+        #Process
+        X = np.transpose(Data[:,0])
+        Y = np.transpose(Data[:,1:])
+        LabelX = Labels[0]
+        LabelY = Labels[1:]
+        
 
-def Plot(X,Y, color = 'blue'):
-    #Plots the arrays X and Y
-    plt.cla()
-    plt.plot(X,Y,color)
-   
-def LiveStream():
+        return X,Y,LabelX,LabelY
+
+def LivePlot(filename,  index=0):
+
+    def Plot(i):
+        #Plots the arrays X and Y
+        plt.cla()
+        X,Y,LabelX,LabelY = GetData(filename)
+        plt.plot(X,Y[index])
+        plt.xlabel(LabelX)
+        plt.ylabel(LabelY[index])
+        
     #Plots live data
-    ani = FuncAnimation(plt.gcf(), Plot, interval=1000)
+    ani = FuncAnimation(plt.gcf(), Plot, interval=100)
+    plt.show()
+
 
 
 #Test it out 
 if __name__ == "__main__":
-    GetData(filename = 'Data/gyro.csv')
+        LivePlot('Data/gyroscope.csv',0)
 
 
     
