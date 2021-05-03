@@ -1,5 +1,9 @@
 from Motors.Motors import *
-class Controller:
+import sys
+import os
+sys.path.append(os.getcwd())
+from Utils.Logging.Logging import *
+class Control:
     def __init__(self, Kp, Ki, Kd, reference, treshhold):
         self.Kp = Kp
         self.Ki = Ki
@@ -7,20 +11,19 @@ class Controller:
         self.reference = reference
         self.treshhold = treshhold
 
-    def get_Actuation(self, reading, previous_error, error_integral, delta, logging=False):
+    def get_Actuation(self, reading, previous_error, error_integral, delta, reference_time, logging=False):
         #params are the Kp, Ki, Kd parameters
         #output: actuation signals
         error = self.reference - reading
         if abs(error) < 1:
             error = 0
-        print(error)
-        print('e ,', error)
+
         #calculate the derivative
         error_derivative = (error - previous_error)/delta
-        print('ed ,', error_derivative)
+
         #calculate the integral
         error_integral = ((error + previous_error)/2)*delta + error_integral
-        print('ei ,', error_integral)
+
         #compute actuation signal
         actuation = self.Kp*error + self.Kd*error_derivative + self.Ki*error_integral
         #need to saturate the input
@@ -42,12 +45,9 @@ class Controller:
     def Balance(self, actuation, delta):
         init = time.time()
         if actuation < 0:
-            print('[INFO] Moving Backwards')
             while(time.time()-init<delta):
                 move_backward(abs(actuation))
                 
         else:
-            move_forward(abs(actuation))
-            print('[INFO] Moving Forward')
             while(time.time()-init<delta):
                 move_forward(abs(actuation))

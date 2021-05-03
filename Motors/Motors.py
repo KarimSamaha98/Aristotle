@@ -33,14 +33,11 @@ def rotateMotorL():
 
 def move_forward(speed):
     #Find the residual delay
-    if speed == 0:
-        print('Stable')
-    else:
+    if speed != 0:
         T = (degperstep*60)/(360*speed)
         T = T - (6.25*10**-5)
         if T<0: #Faster than maximum
             T = 0
-
         #Set direction
         GPIO.output(CW_M2,GPIO.HIGH)
         GPIO.output(CW_M1,GPIO.LOW)
@@ -54,9 +51,7 @@ def move_forward(speed):
 
 def move_backward(speed):
     #Find the residual delay
-    if speed == 0:
-        print('Stable')
-    else:
+    if speed != 0:
         T = (degperstep*60)/(360*speed)
         T = T - (6.25*10**-5)
         if T<0: #Faster than maximum
