@@ -18,6 +18,8 @@ class Gyro:
         self.address = addr
 
     def get_Tilt(self, tilt, dt, reference_time, logging=False):
+        #Returns tilt value betwee -90 and 90
+        
         Complementary = True
         data = sensor.get_accel_data()
         gyro = sensor.get_gyro_data()
@@ -27,15 +29,15 @@ class Gyro:
             tilt = 0.98*(tilt + gyros*dt) + 0.02*acc
         else:
             tilt = math.atan(data["x"]/(math.sqrt(data["y"]**2+data["z"]**2)))
-        tilt=math.atan(data["x"]/data["z"])
         tilt=tilt*180/math.pi
         timestamp = time.time() - reference_time
+        
         #Logging
         if logging:
             WriteData('Data/Gyroscope.csv', [timestamp, gyro["x"], gyro["y"], gyro["z"]], ['Time', 'Gyro_x', 'Gyro_y', 'Gyro_z'])
             WriteData('Data/Accelerometer.csv', [timestamp, data["x"], data["y"], data["z"]], ['Time', 'Acc_x', 'Acc_y', 'Acc_z'])
             WriteData('Data/Tilt.csv', [timestamp, tilt], ['Time', 'Tilt_angle'])
-        return tilt #Value between -90 and 90degrees
+        return tilt 
 
 if __name__ == "__main__":
     Gyro = Gyro(gyro_addr)

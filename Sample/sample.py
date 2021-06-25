@@ -69,7 +69,7 @@ def MainLoop():
 #Launch Multiprocessing
 #Try livestreaming
 p1 = multiprocessing.Process(target=MainLoop)
-p2 = multiprocessing.Process(target=LivePlot, args=['Data/Controller.csv',1])
+p2 = multiprocessing.Process(target=LivePlot, args=['Data/Gyroscope.csv',1])
 p1.start()
 p2.start()
 p2.join()
