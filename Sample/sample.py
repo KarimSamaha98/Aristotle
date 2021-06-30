@@ -2,12 +2,14 @@ import time
 import sys
 import os
 import multiprocessing
+from multiprocessing import Value
 sys.path.append(os.getcwd())
 import math 
 from config.config import *
 from Gyro.Gyro import Gyro
 from Utils.Visualisation.Visual import *
 from Control.PID import *
+from Control.Commander import *
 import csv
 try:
     import RPi.GPIO as GPIO
@@ -26,13 +28,13 @@ for f in files:
 reference_time = time.time()
 
 #Controlling Loop
-def MainLoop():
+def MainLoop(speed):
 
     #Instantiate a gyro object
     Gyroscope = Gyro(gyro_addr)
 
     #Instantiate a controller object
-    Kp = 1.2
+    Kp = 10
     Kd = 0
     Ki = 0
     Controller = Control(Kp, Ki, Kd, 0, 600)
@@ -46,30 +48,41 @@ def MainLoop():
     error_integral = 0
     angle = 0
     init_time = time.time()
+    
 
-
-
+    r1 = time.time()
     while True:
         final_time = time.time()
         delta = final_time-init_time
         #Extract the value continuously
         try:
-            angle = Gyroscope.get_Tilt(angle, delta, logging=True, reference_time=reference_time)
+            angle = Gyroscope.get_Tilt(angle, delta, logging=False, reference_time=reference_time)
         except:
             print('[INFO] Could not fetch angle value')
             break
 
         
-        speed, previous_error, error_integral = Controller.get_Actuation(angle, previous_error, error_integral, delta, logging=True, reference_time=reference_time)
+        speed.value, previous_error, error_integral = Controller.get_Actuation(angle, previous_error, error_integral, delta, logging=False, reference_time=reference_time)
         init_time = time.time()
-        
         #Take action
-        Controller.Balance(speed,0.05)
+        #print(time.time()-r1)
+        #Controller.Balance(speed,0.3)
+        r1 = time.time()
 
+def Command(speed):
+    commander = Commander()
+    while True:
+        try:
+            commander.Balance(speed.value)
+        except:
+            print("[INFO] No speed input yet")
+            
 #Launch Multiprocessing
 #Try livestreaming
-p1 = multiprocessing.Process(target=MainLoop)
-p2 = multiprocessing.Process(target=LivePlot, args=['Data/Gyroscope.csv',1])
+speed = Value('d', 0.0)
+p1 = multiprocessing.Process(target=MainLoop, args=(speed,))
+p2 = multiprocessing.Process(target=Command, args=(speed,))
+#p2 = multiprocessing.Process(target=LivePlot, args=['Data/Tilt.csv',0])
 p1.start()
 p2.start()
-p2.join()
+#p2.join()

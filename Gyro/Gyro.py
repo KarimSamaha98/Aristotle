@@ -26,10 +26,10 @@ class Gyro:
         if Complementary:
             acc = math.atan(data["x"]/(math.sqrt(data["y"]**2+data["z"]**2)))
             gyros = gyro["y"]
-            tilt = 0.98*(tilt + gyros*dt) + 0.02*acc
+            tilt = 0.9*(tilt + (gyros-0.87)*dt) + 0.1*acc*180/math.pi
         else:
             tilt = math.atan(data["x"]/(math.sqrt(data["y"]**2+data["z"]**2)))
-        tilt=tilt*180/math.pi
+            tilt=tilt*180/math.pi
         timestamp = time.time() - reference_time
         
         #Logging
@@ -39,14 +39,22 @@ class Gyro:
             WriteData('Data/Tilt.csv', [timestamp, tilt], ['Time', 'Tilt_angle'])
         return tilt 
 
+    def get_tilt(self, tilt, dt):
+        gyro = sensor.get_gyro_data()
+        tilt = tilt + (gyro["y"]-0.87)*dt
+        print(tilt)
+        return tilt
+
 if __name__ == "__main__":
     Gyro = Gyro(gyro_addr)
     tilt = 0
     init = time.time()
     reference_time = time.time()
     while(True):
-        final = time.time()
-        dt = final - init
-        print(Gyro.get_Tilt(tilt, dt, logging=True))
-        time.sleep(0.1)
         init = time.time()
+        dt = init - reference_time
+        #tilt = Gyro.get_tilt(tilt, dt)
+        tilt = Gyro.get_Tilt(tilt, dt, reference_time, logging=False)
+        print(tilt)
+        reference_time = time.time()
+        time.sleep(0.2)

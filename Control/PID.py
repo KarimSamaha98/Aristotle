@@ -42,12 +42,4 @@ class Control:
         #return the actuation signal
         return actuation,error,error_integral
 
-    def Balance(self, actuation, delta):
-        init = time.time()
-        if actuation < 0:
-            while(time.time()-init<delta):
-                move_backward(abs(actuation))
-                
-        else:
-            while(time.time()-init<delta):
-                move_forward(abs(actuation))
+
