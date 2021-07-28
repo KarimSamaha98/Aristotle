@@ -26,7 +26,7 @@ class Gyro:
         if Complementary:
             acc = math.atan(data["x"]/(math.sqrt(data["y"]**2+data["z"]**2)))
             gyros = gyro["y"]
-            tilt = 0.9*(tilt + (gyros-0.87)*dt) + 0.1*acc*180/math.pi
+            tilt = 0.98*(tilt + (gyros-0.87)*dt) + 0.02*acc*180/math.pi
         else:
             tilt = math.atan(data["x"]/(math.sqrt(data["y"]**2+data["z"]**2)))
             tilt=tilt*180/math.pi

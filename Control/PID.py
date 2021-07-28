@@ -15,7 +15,7 @@ class Control:
         #params are the Kp, Ki, Kd parameters
         #output: actuation signals
         error = self.reference - reading
-        if abs(error) < 1:
+        if abs(error) < 2:
             error = 0
 
         #calculate the derivative
