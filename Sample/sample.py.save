@@ -57,7 +57,8 @@ def MainLoop(speed):
         #Extract the value continuously
         try:
             angle = Gyroscope.get_Tilt(angle, delta, logging=False, reference_time=reference_time)
-        except:
+       
+ except:
             print('[INFO] Could not fetch angle value')
             break
 
@@ -65,11 +66,10 @@ def MainLoop(speed):
         speed.value, previous_error, error_integral = Controller.get_Actuation(angle, previous_error, error_integral, delta, logging=False, reference_time=reference_time)
         init_time = time.time()
         #Take action
-        #print('reaction time in seconds: ',time.time()-r1)
+        print('reaction time in seconds: ',time.time()-r1)
         #Controller.Balance(speed,0.3)
         r1 = time.time()
         print(speed.value)
-        #print(angle)
 
 def Command(speed):
     commander = Commander()
