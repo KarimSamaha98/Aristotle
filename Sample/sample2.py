@@ -100,6 +100,7 @@ def MainLoop():
         
         r1 = time.time()
         print(speed)
+        time.sleep(0.1)
 
 
 MainLoop()
